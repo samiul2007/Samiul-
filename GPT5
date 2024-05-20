@@ -1,0 +1,51 @@
+my-chatbot/
+├── app.py
+├── requirements.txt
+└── README.md
+from flask import Flask, request, jsonify
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+app = Flask(__name__)
+
+# মডেল এবং টোকেনাইজার লোড করুন
+model_name = 'gpt2'  # gpt2, gpt3 এর জন্য API অ্যাক্সেস প্রয়োজন হতে পারে
+model = GPT2LMHeadModel.from_pretrained(model_name)
+tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+
+@app.route('/generate', methods=['POST'])
+def generate():
+    input_text = request.json.get('input_text')
+    input_ids = tokenizer.encode(input_text, return_tensors='pt')
+    output = model.generate(input_ids, max_length=50, num_return_sequences=1)
+    output_text = tokenizer.decode(output[0], skip_special_tokens=True)
+    return jsonify({'response': output_text})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+flask
+transformers
+torch
+# My Chatbot
+
+This is a simple AI chatbot using GPT-2, implemented in Flask.
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/my-chatbot.git
+   cd my-chatbot
+pip install -r 
+requirements.txt
+python app.py
+cd my-chatbot
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/your-username/my-chatbot.git
+git push -u origin main
+heroku login
+heroku create my-chatbot-app
+git push heroku main
+curl -X POST http://my-chatbot-app.herokuapp.com/generate -H "Content-Type: application/json" -d '{"input_text":"Hello"}'
